@@ -46,27 +46,8 @@ to register your app in the project.
 	pip install -r requirements.txt
 	```
 
-3. Create three models and the scaffolding. You can do so by going into Books/models.py and adding code with the following specifications:
-			
-    ### Book
-
-    *   title (string) - required
-    *   proposal_date (date)
-    *   contract_date (date)
-    *   published_date (date)
-    *   units_sold (integer)
-
-    ### Publisher
-
-    *   name (string) - required
-
-    ### Author
-
-    *   first_name (string) - required
-    *   last_name (string) - required
-
-This is the code for the book model. You can follow a similar format for the other two.
-		
+7. We will create three models and their database fields. This is the code for the Book model, which goes in models.py. Note that blank=true means that the field is NOT required, while not including this field means the field is required. 
+	
 	```python
 	from datetime import date
 	class Book(models.Model):
@@ -78,12 +59,26 @@ This is the code for the book model. You can follow a similar format for the oth
 		units_sold = models.IntegerField(default=0, blank=True)
 	```
 
-3. After creating these models, migrate the database by running 
 
-				python manage.py makemigrations books
-				python manage.py migrate
+8. Next, work on creating the models for Publisher and Author in the same file. The fields are as follows:
 
-and save all this generated code to git.
+    ### Publisher
+
+    *   name (string) - required
+
+    ### Author
+
+    *   first_name (string) - required
+    *   last_name (string) - required
+
+
+
+9. After creating these models, migrate the database by running the following and save all this generated code to git.
+
+	```git
+	python manage.py makemigrations books
+	python manage.py migrate
+	```
 
 4.  Create and switch to a new branch in git called models. Add the following two relationships to the Book model:
     ```python
