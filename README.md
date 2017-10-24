@@ -6,15 +6,15 @@
 	django-admin startproject BookManager
 	```
 
-switch directories (`cd`) into this Django app from the command line. You should see the manage.py file. In that directory, type the following to create the app:
+2. Switch directories (`cd`) into this Django app from the command line. You should see the manage.py file. In that directory, type the following to create the app:
 
-
+	```git
 	python manage.py startapp books
+	```
 
+3. Create a git repository, add and commit the initial files with the commit message "Initial commit".
 
-Create a git repository, add and commit the initial files with the commit message "Initial commit".
-
-2. Go into the settings.py file and add the following line into INSTALLED_APPS:
+4. Go into the settings.py file and add the following line into INSTALLED_APPS:
 
 	```python
 	'books.apps.BooksConfig'
@@ -22,27 +22,29 @@ Create a git repository, add and commit the initial files with the commit messag
 
 to register your app in the project.
 
-3. Add a new requirements.txt file with your favorite text editor at the highest level of your project, and add the following:
-		```python
-		appdirs==1.4.3
-		coverage==4.4.1
-		Django==1.11.1
-		factory-boy==2.8.1
-		Faker==0.7.12
-		packaging==16.8
-		pdb==0.1
-		pyparsing==2.2.0
-		python-dateutil==2.6.0
-		python-gnupg==0.4.0
-		pytz==2017.2
-		PyYAML==3.12
-		selenium==3.4.2
-		six==1.10.0
-		```
+5. Add a new requirements.txt file with your favorite text editor at the highest level of your project, and add the following:
+	```python
+	appdirs==1.4.3
+	coverage==4.4.1
+	Django==1.11.1
+	factory-boy==2.8.1
+	Faker==0.7.12
+	packaging==16.8
+	pdb==0.1
+	pyparsing==2.2.0
+	python-dateutil==2.6.0
+	python-gnupg==0.4.0
+	pytz==2017.2
+	PyYAML==3.12
+	selenium==3.4.2
+	six==1.10.0
+	```
 
-		Install the requirements by running
+6. Install the requirements by running
 
-				pip install -r requirements.txt
+	```git
+	pip install -r requirements.txt
+	```
 
 3. Create three models and the scaffolding. You can do so by going into Books/models.py and adding code with the following specifications:
 			
