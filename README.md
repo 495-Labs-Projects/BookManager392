@@ -307,8 +307,9 @@ Becca - This is as far as I went with the Django stuff. I think here we should e
  1) Basic HTML
  2) {%%} - use to run python code
  3) {{}} - use to evaluate and display variable attributes
+After completing this process for books, follow the same procedure for authors and publishers.
 
-```python
+```html
 {% extends "books_base.html" %}
 
 {% block content %}
@@ -331,6 +332,8 @@ Becca - This is as far as I went with the Django stuff. I think here we should e
 
 {% endblock %}
 ```
+
+7. 
 
 1.  Now go to the web interface and add a new publisher: "Pragmatic Bookshelf". After that, go to the books section and add a new book: "Agile Web Development with Rails" which was published by Pragmatic Bookshelf in 2013\. Make sure to update the three date fields with dates that follow the validations for `proposal_date`, `contract_date`, and `published_date` from Part 1! **Note that you need to refer to the publisher by its id (1), rather than its name in the current interface**. Thinking about this, and some other problems with the current interface, we will begin to make the interface more usable, working now in a new branch called 'interface'
 
