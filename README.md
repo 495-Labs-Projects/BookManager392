@@ -333,7 +333,38 @@ After completing this process for books, follow the same procedure for authors a
 {% endblock %}
 ```
 
-7. 
+7. Not sure if we should do list templates or not.
+Also, not fully sure of the best way to teach forms. Should we build a simple form first and then show them how to link that to other files? Or should we start by showing them the best way?
+
+8. Next, we need to add in forms so that we can create books, authors, and publishers in our system. In the books folder create a generic file called forms.py. Since our forms will map very closely to our models we will use forms.ModelForm. 
+
+```python
+from django import forms
+from books.models import *
+
+class BookForm(forms.ModelForm):
+
+    class Meta:
+        model = Book
+        fields = ["title", "year_published", "publisher", "authors"] 
+        widgets = {
+            'authors': forms.CheckboxSelectMultiple,
+        }
+
+
+class AuthorForm(forms.ModelForm):
+
+    class Meta:
+        model = Author
+        fields = ["first_name", "last_name"] 
+
+
+class PublisherForm(forms.ModelForm):
+    
+    class Meta:
+        model = Publisher
+        fields = ["name"] 
+```
 
 1.  Now go to the web interface and add a new publisher: "Pragmatic Bookshelf". After that, go to the books section and add a new book: "Agile Web Development with Rails" which was published by Pragmatic Bookshelf in 2013\. Make sure to update the three date fields with dates that follow the validations for `proposal_date`, `contract_date`, and `published_date` from Part 1! **Note that you need to refer to the publisher by its id (1), rather than its name in the current interface**. Thinking about this, and some other problems with the current interface, we will begin to make the interface more usable, working now in a new branch called 'interface'
 
