@@ -2,17 +2,23 @@
 
 1. Create a new Django project called "BookManager":
 
-				django-admin startproject BookManager
+	```git
+	django-admin startproject BookManager
+	```
 
 switch directories (`cd`) into this Django app from the command line. You should see the manage.py file. In that directory, type the following to create the app:
 
-				python manage.py startapp books
+
+	python manage.py startapp books
+
 
 Create a git repository, add and commit the initial files with the commit message "Initial commit".
 
 2. Go into the settings.py file and add the following line into INSTALLED_APPS:
 
-				'books.apps.BooksConfig'
+	```python
+	'books.apps.BooksConfig'
+	```
 
 to register your app in the project.
 
