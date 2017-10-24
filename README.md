@@ -303,6 +303,35 @@ First, create a folder named 'templates' inside books. Within templates, create 
 
 Becca - This is as far as I went with the Django stuff. I think here we should either give them the code to copy and paste into one of the folders and tell them to do the rest, or give them a link to a git repo where they can download the views and just look at them. After they create the views they should go on the web interface and continue with similar instructions to what you have here I think.
 
+6. Within templates/books create a new file called book_detail.html. This new view will be the show page for an individual book. Copy and paste the code below into the new file. If you review the code below, you'll see that we use three different types of syntax:
+ 1) Basic HTML
+ 2) {%%} - use to run python code
+ 3) {{}} - use to evaluate and display variable attributes
+
+```python
+{% extends "books_base.html" %}
+
+{% block content %}
+
+<h1 id="book-title">{{ object.title }}</h1>
+
+<p>Year Publsihed: {{ object.year_published }}</p>
+<p>Publisher: {{ object.publisher.name }}</p>
+
+<p>
+    Authors:
+    <ul id="book-authors">
+    {% for author in object.authors.all %}
+        <li><a href="{% url 'books:author_detail' author.id %}">{{ author }}</a></li>
+    {% endfor %}
+    </ul>
+</p>
+
+<a href="{% url 'books:book_list' %}">Back to List</a>
+
+{% endblock %}
+```
+
 1.  Now go to the web interface and add a new publisher: "Pragmatic Bookshelf". After that, go to the books section and add a new book: "Agile Web Development with Rails" which was published by Pragmatic Bookshelf in 2013\. Make sure to update the three date fields with dates that follow the validations for `proposal_date`, `contract_date`, and `published_date` from Part 1! **Note that you need to refer to the publisher by its id (1), rather than its name in the current interface**. Thinking about this, and some other problems with the current interface, we will begin to make the interface more usable, working now in a new branch called 'interface'
 
 2.  We'll begin by adding some more publishers directly into the database using the command line. If we think back to the SimpleQuotes lab last week, the easiest way to insert new data is by opening a new command line tab in the same directory and running `rails db`. Then paste the publishers_sql and authors_sql code given so that we have multiple publishers and authors to choose from (and sharpen our db skills slightly). **Note**: do not add the first publisher since we have already added Pragmatic Bookshelf via the web interface; if you do you will get an error because they are already in the db with a id=1.
