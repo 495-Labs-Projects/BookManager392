@@ -67,16 +67,16 @@ to register your app in the project.
 
 This is the code for the book model. You can follow a similar format for the other two.
 		
-		```python
-		from datetime import date
-		class Book(models.Model):
-			# Book fields
-			title = models.CharField(max_length=255)
-			proposal_date = models.DateField(default=datetime.now, blank=True)
-			contract_date = models.DateField(default=datetime.now, blank=True)
-			published_date = models.DateField(default=datetime.now, blank=True)
-			units_sold = models.IntegerField(default=0, blank=True)
-		```
+	```python
+	from datetime import date
+	class Book(models.Model):
+		# Book fields
+		title = models.CharField(max_length=255)
+		proposal_date = models.DateField(default=datetime.now, blank=True)
+		contract_date = models.DateField(default=datetime.now, blank=True)
+		published_date = models.DateField(default=datetime.now, blank=True)
+		units_sold = models.IntegerField(default=0, blank=True)
+	```
 
 3. After creating these models, migrate the database by running 
 
