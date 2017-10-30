@@ -75,10 +75,10 @@ to register your app in the project.
 
 9. After creating these models, migrate the database by running the following and save all this generated code to git.
 
-	```git
-	python manage.py makemigrations books
-	python manage.py migrate
-	```
+	 ```git
+	 python manage.py makemigrations books
+	 python manage.py migrate
+	 ```
 
 10.  Create and switch to a new branch in git called models. Add the following two relationships to the Book model:
 
@@ -97,34 +97,34 @@ Then, add the following scope:
   objects = QuerySet.as_manager()
   ```
 
-    It's also good practice in Django to always add an str method to every model to make debugging easier. You would do so with the following: 
+It's also good practice in Django to always add an str method to every model to make debugging easier. You would do so with the following: 
 
-    ```python
-    def __str__(self):
-    	return self.title
-    ```
+  ```python
+  def __str__(self):
+  	return self.title
+  ```
 
-    Feel free to do so for every model you create.
+Feel free to do so for every model you create.
 
 11.  Go to the Author model and add the following validations, scopes and methods:
 
-    ```python
-    class QuerySet(models.QuerySet):
-    	def alphabetical(self):
-    		return self.order_by('last_name', 'first_name')
+   ```python
+   class QuerySet(models.QuerySet):
+    def alphabetical(self):
+  	  return self.order_by('last_name', 'first_name')
 
-    objects = QuerySet.as_manager()
+   objects = QuerySet.as_manager()
 
-    def __str__(self):
-    	return self.last_name + ', ' + self.first_name 
-    ```
+   def __str__(self):
+  	 return self.last_name + ', ' + self.first_name 
+   ```
 
 12. Now let's add the following validations to the Book model.
 
     ##### Proposal Date
     *   Add a validation so that the `proposal_date` is either the current date or some time in the past. (The reason is you shouldn't be allowed to record a proposal you haven't yet received.) You can add a validator to a field by adding 
 
-    		validators=[<list of custom validator functions here>]
+    		validators = [<list of custom validator functions here>]
 
     ##### Contract Date
     *   Add a validation to `contract_date` to ensure it is either the current date or some time in the past. (The reason is you shouldn't be allowed to record a contract you haven't yet signed.)
@@ -159,16 +159,16 @@ Show a TA that you have the basic Django app set up and working, and that you ha
 
 1. Next, go into BookManager -> urls.py, and replace with the following to make sure that all pages in the books app are under the book/ url path.
 
-		```python
-			from django.conf.urls import url
-			from django.conf.urls import include
-			from django.contrib import admin
+	 ```python
+		 from django.conf.urls import url
+		 from django.conf.urls import include
+		 from django.contrib import admin
 
-			urlpatterns = [
-			    url(r'^admin/', admin.site.urls),
-			    url(r'^books/', include('books.urls', namespace='books')),
-			]
-		```
+		 urlpatterns = [
+		     url(r'^admin/', admin.site.urls),
+		     url(r'^books/', include('books.urls', namespace='books')),
+		 ]
+	 ```
 
 2. Go back into books app and create a new file called urls.py. Add the following to it:
 
