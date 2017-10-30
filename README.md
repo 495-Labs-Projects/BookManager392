@@ -214,78 +214,83 @@ Now write similar url's for Authors and Publishers. Ask a TA if you are confused
 List view will give a list of all publishers (think of index in rails), detail is similar to a 'show' page, and the rest are the CRUD operations for the model. You will notice that each defines different HTTP methods that it will respond to. Within those, necessary variables are created in a context that is then passed on to the rendered template.
 
 	 ```python
-		 class PublisherList(View):
-	     def get(self, request):
-	         template = 'publishers/publisher_list.html'
-	         context = {
-	             'publishers': Publisher.objects.alphabetical()
-	         }
-	         return render(request, template, context)
+class PublisherList(View):
 
-			class PublisherDetail(View):
-		     def get(self, request, pk):
-		         template = 'publishers/publisher_detail.html'
-		         publisher = get_object_or_404(Publisher, pk=pk)
-		         context = {
-		             'publisher': publisher
-		         }
-		         return render(request, template, context)
+    def get(self, request):
+        template = 'publishers/publisher_list.html'
+        context = {
+            'publishers': Publisher.objects.alphabetical()
+        }
+        return render(request, template, context)
 
-			class PublisherCreate(View):
-		    def get(self, request):
-		        template = 'publishers/publisher_form.html'
-		        form = PublisherForm()
-		        context = {
-		            'form': form
-		        }
-		        return render(request, template, context)
+class PublisherDetail(View):
 
-		    def post(self, request):
-		        form = PublisherForm(request.POST)
-		        if form.is_valid():
-		            publisher = form.save()
-		            messages.success(request, 'Sucessfully created %s!' % publisher.name)
-		            return HttpResponseRedirect(reverse('books:publisher_detail', args=(publisher.id,)))
-		        else:
-		            template = 'publishers/publisher_form.html'
-		            context = {
-		                'form': form
-		            }
-		            return render(request, template, context)
+    def get(self, request, pk):
+        template = 'publishers/publisher_detail.html'
+        publisher = get_object_or_404(Publisher, pk=pk)
+        context = {
+            'publisher': publisher
+        }
+        return render(request, template, context)
 
-			class PublisherUpdate(View):
+class PublisherCreate(View):
 
-			    def get(self, request, pk):
-			        template = 'publishers/publisher_form.html'
-			        publisher = get_object_or_404(Publisher, pk=pk)
-			        form = PublisherForm(instance=publisher)
-			        context = {
-			            'publisher': publisher,
-			            'form': form
-			        }
-			        return render(request, template, context)
+    def get(self, request):
+        template = 'publishers/publisher_form.html'
+        form = PublisherForm()
+        context = {
+            'form': form
+        }
+        return render(request, template, context)
 
-			    def post(self, request, pk):
-			        publisher = get_object_or_404(Publisher, pk=pk)
-			        form = PublisherForm(request.POST, instance=publisher)
-			        if form.is_valid():
-			            publisher = form.save()
-			            messages.success(request, 'Sucessfully updated %s!' % publisher.name)
-			            return HttpResponseRedirect(reverse('books:publisher_detail', args=(publisher.id,)))
-			        else:
-			            template = 'publishers/publisher_form.html'
-			            context = {
-			                'form': form
-			            }
-			            return render(request, template, context)
+    def post(self, request):
+        form = PublisherForm(request.POST)
+        if form.is_valid():
+            publisher = form.save()
+            messages.success(request, 'Sucessfully created %s!' % publisher.name)
+            return HttpResponseRedirect(reverse('books:publisher_detail', args=(publisher.id,)))
+        else:
+            template = 'publishers/publisher_form.html'
+            context = {
+                'form': form
+            }
+            return render(request, template, context)
 
-			class PublisherDelete(View):
+class PublisherUpdate(View):
 
-			    def post(self, request, pk):
-			        publisher = get_object_or_404(Publisher, pk=pk)
-			        publisher.delete()
-			        messages.success(request, 'Sucessfully deleted %s!' % publisher.name)
-			        return HttpResponseRedirect(reverse('books:publisher_list'))
+    def get(self, request, pk):
+        template = 'publishers/publisher_form.html'
+        publisher = get_object_or_404(Publisher, pk=pk)
+        form = PublisherForm(instance=publisher)
+        context = {
+            'publisher': publisher,
+            'form': form
+        }
+        return render(request, template, context)
+
+    def post(self, request, pk):
+        publisher = get_object_or_404(Publisher, pk=pk)
+        form = PublisherForm(request.POST, instance=publisher)
+        if form.is_valid():
+            publisher = form.save()
+            messages.success(request, 'Sucessfully updated %s!' % publisher.name)
+            return HttpResponseRedirect(reverse('books:publisher_detail', args=(publisher.id,)))
+        else:
+            template = 'publishers/publisher_form.html'
+            context = {
+                'form': form
+            }
+            return render(request, template, context)
+
+class PublisherDelete(View):
+
+    def post(self, request, pk):
+        publisher = get_object_or_404(Publisher, pk=pk)
+        publisher.delete()
+        messages.success(request, 'Sucessfully deleted %s!' % publisher.name)
+        return HttpResponseRedirect(reverse('books:publisher_list'))
+
+
 		```
 
 5. Now that we have URL's and views, we need to create the templates that will be rendered for those views. Keep in mind that Django has a lot less "magic" than Rails, so a lot of the low level work has to be done where Rails scaffolding may have created it all for you. At the same time, this allows for more customization in Django, which is the reason it is so popular.
