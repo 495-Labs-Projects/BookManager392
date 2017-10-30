@@ -303,7 +303,7 @@ First, create a folder named 'templates' inside books. Within templates, create 
 
 Becca - This is as far as I went with the Django stuff. I think here we should either give them the code to copy and paste into one of the folders and tell them to do the rest, or give them a link to a git repo where they can download the views and just look at them. After they create the views they should go on the web interface and continue with similar instructions to what you have here I think.
 
-6. Within templates/books create a new file called book_detail.html. This new view will be the show page for an individual book. Copy and paste the code below into the new file. If you review the code below, you'll see that we use three different types of syntax:
+6. Within templates/books create a new file called book_detail.html. This new view will be equivalent to the rails show page for an individual book. Copy and paste the code below into the new file. If you review the code below, you'll see that we use three different types of syntax:
  1) Basic HTML
  2) {%%} - use to run python code
  3) {{}} - use to evaluate and display variable attributes
