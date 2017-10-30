@@ -172,22 +172,22 @@ Show a TA that you have the basic Django app set up and working, and that you ha
 
 2. Go back into books app and create a new file called urls.py. Add the following to it:
 
-		```python
-		from django.conf.urls import url
+	 ```python
+		 from django.conf.urls import url
 
-		from books import views
+		 from books import views
 
-		urlpatterns = [
-		    url(r'^$', views.BookList.as_view(), name='book_list'),
-		    url(r'^(?P<pk>\d+)$', views.BookDetail.as_view(), name='book_detail'),
-		    url(r'^new$', views.BookCreate.as_view(), name='book_new'),
-		    url(r'^edit/(?P<pk>\d+)$', views.BookUpdate.as_view(), name='book_edit'),
-		    url(r'^delete/(?P<pk>\d+)$', views.BookDelete.as_view(), name='book_delete'),
+		 urlpatterns = [
+		     url(r'^$', views.BookList.as_view(), name='book_list'),
+		     url(r'^(?P<pk>\d+)$', views.BookDetail.as_view(), name='book_detail'),
+		     url(r'^new$', views.BookCreate.as_view(), name='book_new'),
+		     url(r'^edit/(?P<pk>\d+)$', views.BookUpdate.as_view(), name='book_edit'),
+		     url(r'^delete/(?P<pk>\d+)$', views.BookDelete.as_view(), name='book_delete'),
         
-        ...
-    ]
+         ...
+     ]
 
-		```
+	 ```
 
 This will essentially create all the URL's for the app that will be in the address bar. It will allow us to navigate between the pages. Note that the url's reference different views. These are the Django "controllers". We will make those next.
 
@@ -195,66 +195,63 @@ Now write similar url's for Authors and Publishers. Ask a TA if you are confused
 
 3. Go to the views.py file within the books app. Here we will create class views. What this means is we will create view-controllers for the different CRUD operations for each model. First, add the following imports at the top of your file:
 
-    ```python
-    	from django.shortcuts import get_object_or_404, render
-			from django.http import HttpResponseRedirect
-			from django.urls import reverse
-			from django.contrib import messages
+   ```python
+     from django.shortcuts import get_object_or_404, render
+		 from django.http import HttpResponseRedirect
+		 from django.urls import reverse
+		 from django.contrib import messages
 
-			from django.views.generic import View, TemplateView, ListView
-			from django.views.generic.detail import DetailView
-			from django.views.generic.edit import CreateView, UpdateView, DeleteView
+		 from django.views.generic import View, TemplateView, ListView
+		 from django.views.generic.detail import DetailView
+		 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
-			from books.models import *
-			from books.forms import *
-    ```
+		 from books.models import *
+		 from books.forms import *
+   ```
 
 4. The following are the class based CRUD operations for Publisher. You can copy this into your file. Then, do the same for Book and Author in views.py. 
 
 List view will give a list of all publishers (think of index in rails), detail is similar to a 'show' page, and the rest are the CRUD operations for the model. You will notice that each defines different HTTP methods that it will respond to. Within those, necessary variables are created in a context that is then passed on to the rendered template.
 
-		```python
-			class PublisherList(View):
-
-			    def get(self, request):
-			        template = 'publishers/publisher_list.html'
-			        context = {
-			            'publishers': Publisher.objects.alphabetical()
-			        }
-			        return render(request, template, context)
+	 ```python
+		 class PublisherList(View):
+	     def get(self, request):
+	         template = 'publishers/publisher_list.html'
+	         context = {
+	             'publishers': Publisher.objects.alphabetical()
+	         }
+	         return render(request, template, context)
 
 			class PublisherDetail(View):
-
-			    def get(self, request, pk):
-			        template = 'publishers/publisher_detail.html'
-			        publisher = get_object_or_404(Publisher, pk=pk)
-			        context = {
-			            'publisher': publisher
-			        }
-			        return render(request, template, context)
+		     def get(self, request, pk):
+		         template = 'publishers/publisher_detail.html'
+		         publisher = get_object_or_404(Publisher, pk=pk)
+		         context = {
+		             'publisher': publisher
+		         }
+		         return render(request, template, context)
 
 			class PublisherCreate(View):
+		    def get(self, request):
+		        template = 'publishers/publisher_form.html'
+		        form = PublisherForm()
+		        context = {
+		            'form': form
+		        }
+		        return render(request, template, context)
 
-			    def get(self, request):
-			        template = 'publishers/publisher_form.html'
-			        form = PublisherForm()
-			        context = {
-			            'form': form
-			        }
-			        return render(request, template, context)
-
-			    def post(self, request):
-			        form = PublisherForm(request.POST)
-			        if form.is_valid():
-			            publisher = form.save()
-			            messages.success(request, 'Sucessfully created %s!' % publisher.name)
-			            return HttpResponseRedirect(reverse('books:publisher_detail', args=(publisher.id,)))
-			        else:
-			            template = 'publishers/publisher_form.html'
-			            context = {
-			                'form': form
-			            }
-			            return render(request, template, context)
+		    def post(self, request):
+		        form = PublisherForm(request.POST)
+		        if form.is_valid():
+		            publisher = form.save()
+		            messages.success(request, 'Sucessfully created %s!' % publisher.name)
+		            return HttpResponseRedirect(reverse('books:publisher_detail', args=(publisher.id,)))
+		        else:
+		            template = 'publishers/publisher_form.html'
+		            context = {
+		                'form': form
+		            }
+		            return render(request, template, context)
 
 			class PublisherUpdate(View):
 
