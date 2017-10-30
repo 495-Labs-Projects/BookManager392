@@ -81,10 +81,11 @@ to register your app in the project.
 	```
 
 10.  Create and switch to a new branch in git called models. Add the following two relationships to the Book model:
-    ```python
-    publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE)
-    authors = models.ManyToManyField(Author) 
-    ```
+
+   ```python
+   publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE)
+   authors = models.ManyToManyField(Author) 
+   ```
 
     Then, add the following scope:
 
