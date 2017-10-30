@@ -34,7 +34,7 @@ class Author(models.Model):
 class Book(models.Model):
   # Book validators
   def validate_past_date(date):
-    if date >= timezone.now():
+    if date >= timezone.now().date():
         raise ValidationError(
             _('%(value)s is in the future'),
             params={'value': date},

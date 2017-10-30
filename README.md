@@ -128,7 +128,7 @@ to register your app in the project.
     ##### Contract Date
     *   Add a validation to `contract_date` to ensure it is either the current date or some time in the past. (The reason is you shouldn't be allowed to record a contract you haven't yet signed.)
 
-    *   Also make sure that the `contract_date` is some time after the `proposal_date` as you can't sign contracts for books yet to be proposed. - ASK PROF.H
+    *   Also make sure that the `contract_date` is some time after the `proposal_date` as you can't sign contracts for books yet to be proposed.
 
     You would use the clean() method to compare two different fields. You can do so with the following code:
 
@@ -298,7 +298,35 @@ Next, create a templates folder in the outer directory. You can get the files fr
 
 and add them to this folder.
 
-6. Within templates/books create a new file called book_detail.html. This new view will be equivalent to the rails show page for an individual book. Copy and paste the code below into the new file. If you review the code below, you'll see that we use three different types of syntax:
+6. Before any templates will be able to load, we need to add a few things to the top level BookManager so that it knows to look in books for the templates. First, go to urls.py in BookManager and add the following (or replace if already there):
+
+```python
+url(r'^books/', include('books.urls', namespace='books')),
+```
+
+Next, go to settings.py and replace the TEMPLATES variable with the following:
+
+```python
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates').replace('\\','/'),
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+```
+
+7. Now we are ready to create some templates. Within templates/books create a new file called book_detail.html. This new view will be equivalent to the rails show page for an individual book. Copy and paste the code below into the new file. If you review the code below, you'll see that we use three different types of syntax:
  1) Basic HTML
  2) {%%} - use to run python code
  3) {{}} - use to evaluate and display variable attributes
@@ -328,7 +356,7 @@ After completing this process for books, follow the same procedure for authors a
 {% endblock %}
 ```
 
-7. We should also add in the equivalent of index pages for our different models to that we can see lists of books, authors, and publishers. Create a new file called book_list.html inside books/templates/books and include the following:
+8. We should also add in the equivalent of index pages for our different models to that we can see lists of books, authors, and publishers. Create a new file called book_list.html inside books/templates/books and include the following:
 
 ```html
 {% extends "books_base.html" %}
@@ -357,7 +385,7 @@ After completing this process for books, follow the same procedure for authors a
 ```
 Make sure to create list pages for author and publisher as well.
 
-8. Since we have now given the user the ability to delete objects, let us also make sure that we have a confirmation for them before they actually delete an object. For authors create a new file in books/templates/author called author_confirm_delete.html and include: 
+9. Since we have now given the user the ability to delete objects, let us also make sure that we have a confirmation for them before they actually delete an object. For authors create a new file in books/templates/author called author_confirm_delete.html and include: 
 
 ```html
 {% extends "books_base.html" %}
@@ -385,7 +413,7 @@ class AuthorDelete(DeleteView):
 
 Once again, make sure you complete these steps for book and publisher yourself.
 
-9. Next, we need to add in forms so that we can create and books, authors, and publishers in our system. In the books folder create a generic file called forms.py. Since our forms will map very closely to our models we will use forms.ModelForm. The following is the code for author. Create the same class structure for books and publishers.
+10. Next, we need to add in forms so that we can create and books, authors, and publishers in our system. In the books folder create a generic file called forms.py. Since our forms will map very closely to our models we will use forms.ModelForm. The following is the code for author. Create the same class structure for books and publishers.
 
 ```python
 from django import forms
@@ -398,7 +426,7 @@ class AuthorForm(forms.ModelForm):
         fields = ["first_name", "last_name"]  
 ```
 
-10. Once again we need to create views for our forms. Going back to books/templates/publishers create a new file called publisher_form.html:
+11. Once again we need to create views for our forms. Going back to books/templates/publishers create a new file called publisher_form.html:
 
 ```html
 
@@ -426,7 +454,7 @@ class AuthorForm(forms.ModelForm):
 
 ```
 
-11. In the publisher form we created a field for each attribute in our model. In this case, we only had to create a form field for name. But if we had a model with lots of fields our form could get very messy. Instead we can use a django shortcut, form.as_p to render all of the fields in html p tags. Let's create the author form this way:
+12. In the publisher form we created a field for each attribute in our model. In this case, we only had to create a form field for name. But if we had a model with lots of fields our form could get very messy. Instead we can use a django shortcut, form.as_p to render all of the fields in html p tags. Let's create the author form this way:
 
 ```html
 {% extends "books_base.html" %}
@@ -446,7 +474,7 @@ class AuthorForm(forms.ModelForm):
 ```
 Follow the same procedure for book as well.
 
-12. Lastly, the book form contains a list of authors and the user should be able to select one to many authors for the book. To ensure the form works this way, let's update the book model in the forms.py file to be:
+13. Lastly, the book form contains a list of authors and the user should be able to select one to many authors for the book. To ensure the form works this way, let's update the book model in the forms.py file to be:
 
 ```python
 class Meta:
@@ -459,7 +487,7 @@ class Meta:
 
 This way the form will render the authors as a list of checkboxes from which the user can select multiple.
 
-13. Now let's check out the admin panel. The admin panel is an interface that Django provides for you to interact with the database directly. You can access it from localhost by adding '/admin' to your url. The first step to be able to get into the admin portal is to create a superuser that has access to it. To do this, you would type in
+14. Now let's check out the admin panel. The admin panel is an interface that Django provides for you to interact with the database directly. You can access it from localhost by adding '/admin' to your url. The first step to be able to get into the admin portal is to create a superuser that has access to it. To do this, you would type in
 
 ```git
 python manage.py createsuperuser
@@ -467,103 +495,24 @@ python manage.py createsuperuser
 
 in the top level directory. Then you can follow the steps to create a username, email, and password. Make sure to run the server. Then you can go to '/admin' and you should see "Django administration" with a login form.
 
-14. Now go to the web interface and add a new publisher: "Pragmatic Bookshelf". After that, go to the books section and add a new book: "Agile Web Development with Rails" which was published by Pragmatic Bookshelf in 2013\. Make sure to update the three date fields with dates that follow the validations for `proposal_date`, `contract_date`, and `published_date` from Part 1! **Note that you need to refer to the publisher by its id (1), rather than its name in the current interface**. Thinking about this, and some other problems with the current interface, we will begin to make the interface more usable, working now in a new branch called 'interface'
+15. Notice that you currently can't see any of your models. This is because we need to allow the admin to access each model. To do this, go to the admin.py file in books and add the following:
 
-2.  We'll begin by adding some more publishers directly into the database using the command line. If we think back to the SimpleQuotes lab last week, the easiest way to insert new data is by opening a new command line tab in the same directory and running `rails db`. Then paste the publishers_sql and authors_sql code given so that we have multiple publishers and authors to choose from (and sharpen our db skills slightly). **Note**: do not add the first publisher since we have already added Pragmatic Bookshelf via the web interface; if you do you will get an error because they are already in the db with a id=1.
+```python
+from books.models import *
+admin.site.register(Author)
+admin.site.register(Publisher)
+admin.site.register(Book)
+```
 
-    ```sql
-    -- SQL for authors
-    INSERT INTO "authors" VALUES (1, 'Sam', 'Ruby', '2015-02-09 12:00:00', '2014-02-10 12:00:00');
-    INSERT INTO "authors" VALUES (2, 'Dave', 'Thomas', '2015-02-09 12:00:00', '2014-02-10 12:00:00');
-    INSERT INTO "authors" VALUES (3, 'Hal', 'Fulton', '2015-02-09 12:00:00', '2014-02-10 12:00:00');
-    INSERT INTO "authors" VALUES (4, 'Robert', 'Hoekman', '2015-02-09 12:00:00', '2014-02-10 12:00:00');
-    INSERT INTO "authors" VALUES (5, 'David', 'Hannson', '2015-02-09 12:00:00', '2014-02-10 12:00:00');
-    INSERT INTO "authors" VALUES (6, 'Dante', 'Alighieri', '2015-02-09 12:00:00', '2014-02-10 12:00:00');
-    INSERT INTO "authors" VALUES (7, 'William', 'Shakespeare', '2015-02-09 12:00:00', '2014-02-10 12:00:00');
-    INSERT INTO "authors" VALUES (8, 'Jane', 'Austen', '2015-02-09 12:00:00', '2014-02-10 12:00:00');
+Re-run the server and you should now see all the models in the admin portal.
 
-    -- SQL for publishers
-    INSERT INTO "publishers" VALUES (1, 'Pragmatic Bookshelf', '2015-02-09 12:00:00', '2014-02-10 12:00:00');
-    INSERT INTO "publishers" VALUES (2, 'Washington Square Press', '2015-02-09 12:00:00', '2014-02-10 12:00:00');
-    INSERT INTO "publishers" VALUES (3, 'Addison Wesley', '2015-02-09 12:00:00', '2014-02-10 12:00:00');
-    INSERT INTO "publishers" VALUES (4, 'Everyman Library', '2015-02-09 12:00:00', '2014-02-10 12:00:00');
-    INSERT INTO "publishers" VALUES (5, 'New Riders', '2015-02-09 12:00:00', '2014-02-10 12:00:00');
-    ```
+16. Create two authors, a publisher, and a book using the admin portal. Note that you can pick more than one author for each book.
 
-3.  The first thing we will do is switch the 'publisher_id' field (a text box where you are supposed to remember and type out the appropriate publisher's id) to a drop-down list. Now that we have some publishers in the system, go to the `_form` partial in the Books view and change the publisher_id text_field to the following line:
-
-    ```erb
-    <%= form.collection_select :publisher_id, Publisher.alphabetical, :id, :name %>
-    ```
-
-    Look at the new form on the web page. It's an improvement (I also like to convert the number_field for year_published to a straight text field, but not required), but it'd be a little nicer if it didn't default to the first publisher. Go to [apidock.com/rails](http://apidock.com/rails) and look up `collection_select` and see if there is an option that will prompt the user for input rather than just display the first record. Implement similar functionality for contract_date and published_date (which are not required). After fixing this, I'd recommend you save this work to your git repository.
-
-4.  Of course, we also need to be able to select one or more authors for each book. In the `_form.html.erb` template for books, add in a partial that will create the checkboxes for assigning an author to a book. Add the line
-
-    ```erb
-    <%= render partial: 'authors_checkboxes' %>
-    ```
-
-    just prior to the submit button in the template.
-
-    Within the `app/views/books` directory, create a new file called `_authors_checkboxes.html.erb` and add to it the following code:
-
-    ```erb
-    <%= for author in Author.alphabetical %>
-      <%= check_box_tag "book[author_ids][]", author.id, @book.authors.include?(author) %>
-      <%= author.name %>
-    <%= end %>
-    ```
-
-    Note: in Rails 3 and above, `render` assumes by default you are rendering a partial, so you could just say `render 'authors_checkboxes'` here, but I want you to put the `:partial =>` in for now to reinforce the idea of partials.
-
-    If you were to try and submit the data for this form, it would reject the information for the authors (You could check this by looking in the BookAuthor table). We will talk about this later in the course. For now, add `:author_ids` to the list of attributes that your controller will allow to be passed to your Book model. We can find that list in a private method called `book_params` at the bottom of the `BooksController` -- add `:author_ids` there. Because this is an array of ids, we need to let Rails know that with the code below:
-
-    ```ruby
-    # controllers/books_controller.rb
-    def book_params
-      params.require(:book).permit(:title, :year_published, :publisher_id, :author_ids => [])
-    end
-    ```
-
-5.  In the show template for books, change the `@book.publisher_id` to `@book.publisher.name` so that we are displaying more useful information regarding the publisher. After that, add in a partial that will create a bulleted list of authors for a particular book. To do that, add the line:
-
-    ```erb
-    <%= render partial: 'list_of_authors' %>
-    ```
-
-    after the publisher information in the template and in the code. Then add a file called `_list_of_authors.html.erb` to the app/views/books directory. Within this new file add the following code:
-
-    ```erb
-    <%= pluralize(@book.authors.size, 'Author') %>
-    ```
-
-6.  After that, add some books to the system using the web interface. Given the authors added, there are some suggested books listed at the end of this lab, but you can do as you wish. View and edit the books to be sure that everything is worked as intended. Of course, looking at the books index page, we realize it too has issues; fix it so that the publisher's name is listed rather than the id (see previous step if you forgot how) and the books are in alphabetical order by using the alphabetical scope in the appropriate place in the books_controller. (Try it yourself, but see a TA if you are struggling on this last one for more than 5 minutes.)
-
-    **BTW, have you been using git after each step? If not, time to do so...**
-
-7.  Look at the partial `list_of_authors`. There are three things to take note of:
-
-    1.  how the pluralize function adds an 's' at the end of author when there is more than one
-    2.  how Ruby loops through the list of authors (note that the erb tags for the 'for' and 'end' tag do not have an equal sign)
-    3.  how Rails' link_to tag is used to wrap the author's name in an anchor tag leading back to the author's details page.
-8.  Before having the TA sign off, you decide to test the following: go to a book in the system, uncheck all the authors, and save. It saves 'successfully', but the list of authors remains unchanged. **Ouch**. Good thing we are testing this app pretty carefully. How do we fix this? First, we need to realize that this happens because if no values are checked for author_ids, then rails by default just doesn't submit the parameter `book[:author_ids][]`. We can force it to submit an empty array by default by adding to the book form (right after the form_for tag) the following line:
-
-    ```erb
-    <%= hidden_field_tag "book[author_ids][]", nil%>
-    ```
-
-    Once this is working (test it again to be sure), then you can merge the `interface` branch in git back into the `master` branch.
-
-9.  (Optional, but recommended if you have time left in lab) Having developed the interface for books, go back to the`interface` branch and write your own partial for show template of the authors view so that it added a list of all the books the author has written. (This is very similar to what was done for the show book functionality and those instructions/code can guide you.) Once you know it is working properly, save the code to the repo and merge back into the master branch.
+17. Finally, ensure that you commit all your changes to git and merge branches to master. You should be able to see the models on the interface after adding them in the admin portal. Feel free to play around and add some more of the books below to get familiar with the admin portal, or work on making the interface better if you have extra time.
 
 # <span class="mega-icon mega-icon-issue-opened"></span>Stop
 
 Show a TA that you have completed the lab. Make sure the TA initials your sheet.
-
-## On Your Own
-
-This week the "on your own" assignment is to go to [RubyMonk's free Ruby Primer](http://rubymonk.com/learning/books/1) and complete any of the previously assigned exercises you have not yet done. If you are caught up and understand the previous exercises (repeat any you are unsure of), you may if time allows choose any of the other primer exercises and try to get ahead (we will do more of these exercises after the exam). Note: be aware that questions from RubyMonk can and will show up on the exam, so 'doing it on your own' does not mean 'doing it if you want to'.
 
 * * *
 
