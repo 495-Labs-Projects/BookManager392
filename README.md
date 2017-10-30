@@ -333,7 +333,7 @@ After completing this process for books, follow the same procedure for authors a
 {% endblock %}
 ```
 
-7. We should also add in the equivalent of index pages for our different models to that we can see lists of books, authors, and publishers. Create a new file called book_list.html inside templates/books and include the following:
+7. We should also add in the equivalent of index pages for our different models to that we can see lists of books, authors, and publishers. Create a new file called book_list.html inside books/templates/books and include the following:
 
 ```html
 {% extends "books_base.html" %}
@@ -362,7 +362,7 @@ After completing this process for books, follow the same procedure for authors a
 ```
 Make sure to create list pages for author and publisher as well.
 
-8. Since we have now given the user the ability to delete objects, let us also make sure that we have a confirmation for them before they actually delete an object. For authors create a new file in templates/author called author_confirm_delete.html and include: 
+8. Since we have now given the user the ability to delete objects, let us also make sure that we have a confirmation for them before they actually delete an object. For authors create a new file in books/templates/author called author_confirm_delete.html and include: 
 
 ```html
 {% extends "books_base.html" %}
@@ -390,35 +390,81 @@ class AuthorDelete(DeleteView):
 
 Once again, make sure you complete these steps for book and publisher yourself.
 
-9. Next, we need to add in forms so that we can create books, authors, and publishers in our system. In the books folder create a generic file called forms.py. Since our forms will map very closely to our models we will use forms.ModelForm. 
+9. Next, we need to add in forms so that we can create and books, authors, and publishers in our system. In the books folder create a generic file called forms.py. Since our forms will map very closely to our models we will use forms.ModelForm. The following is the code for author. Create the same class structure for books and publishers.
 
 ```python
 from django import forms
 from books.models import *
 
-class BookForm(forms.ModelForm):
+class AuthorForm(forms.ModelForm):
 
     class Meta:
+        model = Author
+        fields = ["first_name", "last_name"]  
+```
+
+10. Once again we need to create views for our forms. Going back to books/templates/publishers create a new file called publisher_form.html:
+
+```html
+
+{% extends "books_base.html" %}
+
+{% block content %}
+
+<form method="post">{% csrf_token %}
+    {{ form.non_field_errors }}
+    <p>
+        {{ form.name.errors }}
+        <label for="{{ form.name.id_for_label }}">Name:</label>
+        {{ form.name }}
+    </p>
+
+    {% if publisher %}
+        <input type="submit" value="Update Publisher" />
+    {% else %}
+        <input type="submit" value="Create Publisher" />
+    {% endif %}
+</form>
+
+{% endblock %}
+
+
+```
+
+11. In the publisher form we created a field for each attribute in our model. In this case, we only had to create a form field for name. But if we had a model with lots of fields our form could get very messy. Instead we can use a django shortcut, form.as_p to render all of the fields in html p tags. Let's create the author form this way:
+
+```html
+{% extends "books_base.html" %}
+
+{% block content %}
+
+<form method="post">{% csrf_token %}
+    {{ form.as_p }}
+    {% if object %}
+        <input type="submit" value="Update Author" />
+    {% else %}
+        <input type="submit" value="Create Author" />
+    {% endif %}
+</form>
+
+{% endblock %}
+```
+Follow the same procedure for book as well.
+
+12. Lastly, the book form contains a list of authors and the user should be able to select one to many authors for the book. To ensure the form works this way, let's update the book model in the forms.py file to be:
+
+```python
+class Meta:
         model = Book
         fields = ["title", "year_published", "publisher", "authors"] 
         widgets = {
             'authors': forms.CheckboxSelectMultiple,
         }
-
-
-class AuthorForm(forms.ModelForm):
-
-    class Meta:
-        model = Author
-        fields = ["first_name", "last_name"] 
-
-
-class PublisherForm(forms.ModelForm):
-    
-    class Meta:
-        model = Publisher
-        fields = ["name"] 
 ```
+
+This way the form will render the authors as a list of checkboxes from which the user can select multiple.
+
+13. Now check out the admin panel.
 
 1.  Now go to the web interface and add a new publisher: "Pragmatic Bookshelf". After that, go to the books section and add a new book: "Agile Web Development with Rails" which was published by Pragmatic Bookshelf in 2013\. Make sure to update the three date fields with dates that follow the validations for `proposal_date`, `contract_date`, and `published_date` from Part 1! **Note that you need to refer to the publisher by its id (1), rather than its name in the current interface**. Thinking about this, and some other problems with the current interface, we will begin to make the interface more usable, working now in a new branch called 'interface'
 
