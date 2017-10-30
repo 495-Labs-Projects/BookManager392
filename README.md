@@ -87,15 +87,15 @@ to register your app in the project.
    authors = models.ManyToManyField(Author) 
    ```
 
-    Then, add the following scope:
+Then, add the following scope:
 
-    ```python
-    class QuerySet(models.QuerySet):
-    	def alphabetical(self):
-    		return self.order_by('title')
+  ```python
+  class QuerySet(models.QuerySet):
+    def alphabetical(self):
+    	return self.order_by('title')
 
-    objects = QuerySet.as_manager()
-    ```
+  objects = QuerySet.as_manager()
+  ```
 
     It's also good practice in Django to always add an str method to every model to make debugging easier. You would do so with the following: 
 
