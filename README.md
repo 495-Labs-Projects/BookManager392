@@ -213,7 +213,7 @@ Now write similar url's for Authors and Publishers. Ask a TA if you are confused
 
 List view will give a list of all publishers (think of index in rails), detail is similar to a 'show' page, and the rest are the CRUD operations for the model. You will notice that each defines different HTTP methods that it will respond to. Within those, necessary variables are created in a context that is then passed on to the rendered template.
 
-	 ```python
+```python
 class PublisherList(View):
 
     def get(self, request):
@@ -289,9 +289,7 @@ class PublisherDelete(View):
         publisher.delete()
         messages.success(request, 'Sucessfully deleted %s!' % publisher.name)
         return HttpResponseRedirect(reverse('books:publisher_list'))
-
-
-		```
+```
 
 5. Now that we have URL's and views, we need to create the templates that will be rendered for those views. Keep in mind that Django has a lot less "magic" than Rails, so a lot of the low level work has to be done where Rails scaffolding may have created it all for you. At the same time, this allows for more customization in Django, which is the reason it is so popular.
 
