@@ -333,10 +333,64 @@ After completing this process for books, follow the same procedure for authors a
 {% endblock %}
 ```
 
-7. Not sure if we should do list templates or not.
-Also, not fully sure of the best way to teach forms. Should we build a simple form first and then show them how to link that to other files? Or should we start by showing them the best way?
+7. We should also add in the equivalent of index pages for our different models to that we can see lists of books, authors, and publishers. Create a new file called book_list.html inside templates/books and include the following:
 
-8. Next, we need to add in forms so that we can create books, authors, and publishers in our system. In the books folder create a generic file called forms.py. Since our forms will map very closely to our models we will use forms.ModelForm. 
+```html
+{% extends "books_base.html" %}
+
+{% block content %}
+
+<h1>Books</h1>
+
+{% if object_list %}
+    <ul id="book-list">
+        {% for book in object_list %}
+        <li>
+            <a href="{% url 'books:book_detail' book.id %}">{{ book.title }}</a>
+            <a href="{% url 'books:book_edit' book.id %}">edit</a>
+            <a href="{% url 'books:book_delete' book.id %}">delete</a>
+        </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No books are available.</p>
+{% endif %}
+
+<a href="{% url 'books:book_new' %}">New</a>
+
+{% endblock %}
+```
+Make sure to create list pages for author and publisher as well.
+
+8. Since we have now given the user the ability to delete objects, let us also make sure that we have a confirmation for them before they actually delete an object. For authors create a new file in templates/author called author_confirm_delete.html and include: 
+
+```html
+{% extends "books_base.html" %}
+
+{% block content %}
+
+<form method="post">{% csrf_token %}
+    Are you sure you want to delete "{{ object }}" ?
+    <input type="submit" value="Submit" />
+</form>
+
+{% endblock %}
+```
+
+Accordingly, we'll need to update our views.py file so that we see the new confirmation when we try to delete an author: 
+
+```python
+class AuthorDelete(DeleteView):
+    model = Author
+    template_name = 'authors/author_confirm_delete.html'
+    
+    def get_success_url(self):
+        return reverse('books:author_list')
+```
+
+Once again, make sure you complete these steps for book and publisher yourself.
+
+9. Next, we need to add in forms so that we can create books, authors, and publishers in our system. In the books folder create a generic file called forms.py. Since our forms will map very closely to our models we will use forms.ModelForm. 
 
 ```python
 from django import forms
