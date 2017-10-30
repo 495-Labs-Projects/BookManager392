@@ -1,0 +1,21 @@
+{% extends "books_base.html" %}
+
+{% block content %}
+
+<h1 id="book-title">{{ object.title }}</h1>
+
+<p>Year Publsihed: {{ object.year_published }}</p>
+<p>Publisher: {{ object.publisher.name }}</p>
+
+<p>
+    Authors:
+    <ul id="book-authors">
+    {% for author in object.authors.all %}
+        <li><a href="{% url 'books:author_detail' author.id %}">{{ author }}</a></li>
+    {% endfor %}
+    </ul>
+</p>
+
+<a href="{% url 'books:book_list' %}">Back to List</a>
+
+{% endblock %}

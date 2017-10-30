@@ -1,0 +1,19 @@
+{% extends "books_base.html" %}
+
+{% block content %}
+
+<h1>{{ publisher.name }}</h1>
+
+<p>Name: {{ publisher.name }}</p>
+<p>
+    Books published:
+    <ul>
+    {% for book in publisher.book_set.all %}
+        <li><a href="{% url 'books:book_detail' book.id %}">{{ book.title }}</a></li>
+    {% endfor %}
+    </ul>
+</p>
+
+<a href="{% url 'books:publisher_list' %}">Back to List</a>
+
+{% endblock %}

@@ -80,7 +80,7 @@ to register your app in the project.
 	python manage.py migrate
 	```
 
-4.  Create and switch to a new branch in git called models. Add the following two relationships to the Book model:
+10.  Create and switch to a new branch in git called models. Add the following two relationships to the Book model:
     ```python
     publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE)
     authors = models.ManyToManyField(Author) 
@@ -105,7 +105,7 @@ to register your app in the project.
 
     Feel free to do so for every model you create.
 
-5.  Go to the Author model and add the following validations, scopes and methods:
+11.  Go to the Author model and add the following validations, scopes and methods:
 
     ```python
     class QuerySet(models.QuerySet):
@@ -118,7 +118,7 @@ to register your app in the project.
     	return self.last_name + ', ' + self.first_name 
     ```
 
-6. Now let's add the following validations to the Book model.
+12. Now let's add the following validations to the Book model.
 
     ##### Proposal Date
     *   Add a validation so that the `proposal_date` is either the current date or some time in the past. (The reason is you shouldn't be allowed to record a proposal you haven't yet received.) You can add a validator to a field by adding 
@@ -182,22 +182,15 @@ Show a TA that you have the basic Django app set up and working, and that you ha
 		    url(r'^new$', views.BookCreate.as_view(), name='book_new'),
 		    url(r'^edit/(?P<pk>\d+)$', views.BookUpdate.as_view(), name='book_edit'),
 		    url(r'^delete/(?P<pk>\d+)$', views.BookDelete.as_view(), name='book_delete'),
-
-		    url(r'^authors$', views.AuthorList.as_view(), name='author_list'),
-		    url(r'^authors/(?P<pk>\d+)$', views.AuthorDetail.as_view(), name='author_detail'),
-		    url(r'^authors/new$', views.AuthorCreate.as_view(), name='author_new'),
-		    url(r'^authors/edit/(?P<pk>\d+)$', views.AuthorUpdate.as_view(), name='author_edit'),
-		    url(r'^authors/delete/(?P<pk>\d+)$', views.AuthorDelete.as_view(), name='author_delete'),
-
-		    url(r'^publishers$', views.PublisherList.as_view(), name='publisher_list'),
-		    url(r'^publishers/(?P<pk>\d+)$', views.PublisherDetail.as_view(), name='publisher_detail'),
-		    url(r'^publishers/new$', views.PublisherCreate.as_view(), name='publisher_new'),
-		    url(r'^publishers/edit/(?P<pk>\d+)$', views.PublisherUpdate.as_view(), name='publisher_edit'),
-		    url(r'^publishers/delete/(?P<pk>\d+)$', views.PublisherDelete.as_view(), name='publisher_delete'),
-		]
+        
+        ...
+    ]
 
 		```
+
 This will essentially create all the URL's for the app that will be in the address bar. It will allow us to navigate between the pages. Note that the url's reference different views. These are the Django "controllers". We will make those next.
+
+Now write similar url's for Authors and Publishers. Ask a TA if you are confused.
 
 3. Go to the views.py file within the books app. Here we will create class views. What this means is we will create view-controllers for the different CRUD operations for each model. First, add the following imports at the top of your file:
 
@@ -301,7 +294,9 @@ List view will give a list of all publishers (think of index in rails), detail i
 
 First, create a folder named 'templates' inside books. Within templates, create folders for authors, books, and publishers.
 
-Becca - This is as far as I went with the Django stuff. I think here we should either give them the code to copy and paste into one of the folders and tell them to do the rest, or give them a link to a git repo where they can download the views and just look at them. After they create the views they should go on the web interface and continue with similar instructions to what you have here I think.
+Next, create a templates folder in the outer directory. You can get the files from the following link: < placeholder >
+
+and add them to this folder.
 
 6. Within templates/books create a new file called book_detail.html. This new view will be equivalent to the rails show page for an individual book. Copy and paste the code below into the new file. If you review the code below, you'll see that we use three different types of syntax:
  1) Basic HTML
@@ -464,9 +459,15 @@ class Meta:
 
 This way the form will render the authors as a list of checkboxes from which the user can select multiple.
 
-13. Now check out the admin panel.
+13. Now let's check out the admin panel. The admin panel is an interface that Django provides for you to interact with the database directly. You can access it from localhost by adding '/admin' to your url. The first step to be able to get into the admin portal is to create a superuser that has access to it. To do this, you would type in
 
-1.  Now go to the web interface and add a new publisher: "Pragmatic Bookshelf". After that, go to the books section and add a new book: "Agile Web Development with Rails" which was published by Pragmatic Bookshelf in 2013\. Make sure to update the three date fields with dates that follow the validations for `proposal_date`, `contract_date`, and `published_date` from Part 1! **Note that you need to refer to the publisher by its id (1), rather than its name in the current interface**. Thinking about this, and some other problems with the current interface, we will begin to make the interface more usable, working now in a new branch called 'interface'
+```git
+python manage.py createsuperuser
+```
+
+in the top level directory. Then you can follow the steps to create a username, email, and password. Make sure to run the server. Then you can go to '/admin' and you should see "Django administration" with a login form.
+
+14. Now go to the web interface and add a new publisher: "Pragmatic Bookshelf". After that, go to the books section and add a new book: "Agile Web Development with Rails" which was published by Pragmatic Bookshelf in 2013\. Make sure to update the three date fields with dates that follow the validations for `proposal_date`, `contract_date`, and `published_date` from Part 1! **Note that you need to refer to the publisher by its id (1), rather than its name in the current interface**. Thinking about this, and some other problems with the current interface, we will begin to make the interface more usable, working now in a new branch called 'interface'
 
 2.  We'll begin by adding some more publishers directly into the database using the command line. If we think back to the SimpleQuotes lab last week, the easiest way to insert new data is by opening a new command line tab in the same directory and running `rails db`. Then paste the publishers_sql and authors_sql code given so that we have multiple publishers and authors to choose from (and sharpen our db skills slightly). **Note**: do not add the first publisher since we have already added Pragmatic Bookshelf via the web interface; if you do you will get an error because they are already in the db with a id=1.
 
