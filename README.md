@@ -231,7 +231,7 @@ Show a TA that you have the basic Django app set up and working, and that you ha
 		 ]
 	 ```
 
-2. Go back into books app and create a new file called urls.py. Add the following to it:
+2. Go back into books app and create a new file called urls.py. Add the following to it and create url's for Authors and Publishers:
 
 	 ```python
 		 from django.conf.urls import url
