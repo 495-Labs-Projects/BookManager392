@@ -1,4 +1,4 @@
-## Before Starting Setup Virtualenv
+## Part 0: Setting Up Virtualenv
 
 virtualenv is a tool to create isolated Python environments. virtualenv creates a folder which contains all the necessary executables to use the packages that a Python project would need. This helps with setting all necessary python requirements and dependencies for your Django app. 
 
