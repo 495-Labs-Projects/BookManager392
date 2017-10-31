@@ -59,7 +59,7 @@ Any other terminal windows that you open will not have the virtual environment r
 
 In order to deactivate or exit out of the virtual environment from the current window you will need to type in `deactivate`.
 
-## Part 1
+## Part 1: Setting up Models
 
 1. Create a new Django project called "BookManager":
 
@@ -216,7 +216,7 @@ Show a TA that you have the basic Django app set up and working, and that you ha
 
 * * *
 
-## Part 2
+## Part 2: Views and Templates
 
 1. Next, go into BookManager -> urls.py, and replace with the following to make sure that all pages in the books app are under the book/ url path.
 
